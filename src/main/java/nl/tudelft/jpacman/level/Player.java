@@ -14,6 +14,8 @@ import nl.tudelft.jpacman.sprite.Sprite;
  */
 public class Player extends Unit {
 
+    private static final int NO_HEALTH_REMAINING = 0;
+
     /**
      * The amount of points accumulated by this player.
      */
@@ -39,6 +41,8 @@ public class Player extends Unit {
      */
     private Unit killer;
 
+    private Health health;
+
     /**
      * Creates a new player with a score of 0 points.
      *
@@ -47,7 +51,8 @@ public class Player extends Unit {
      * @param deathAnimation
      *            The sprite to be shown when this player dies.
      */
-    protected Player(Map<Direction, Sprite> spriteMap, AnimatedSprite deathAnimation) {
+    protected Player(Map<Direction, Sprite> spriteMap, AnimatedSprite deathAnimation, Health health) {
+        this.health = health;
         this.score = 0;
         this.alive = true;
         this.sprites = spriteMap;
@@ -72,15 +77,20 @@ public class Player extends Unit {
      * @param isAlive
      *            <code>true</code> iff this player is alive.
      */
-    public void setAlive(boolean isAlive) {
-        if (isAlive) {
+    public void checkAlive() {
+        if (this.health.getHealthPoints() == NO_HEALTH_REMAINING) {
+            deathSprite.restart();
+            this.alive = false;
+        } else {
             deathSprite.setAnimating(false);
             this.killer = null;
+            this.alive = true;
         }
-        if (!isAlive) {
-            deathSprite.restart();
-        }
-        this.alive = isAlive;
+    }
+
+    public void loseHealthPoint() {
+        this.health.decrementHealthPoint();
+        checkAlive();
     }
 
     /**
@@ -127,5 +137,9 @@ public class Player extends Unit {
      */
     public void addPoints(int points) {
         score += points;
+    }
+
+    public Health getHealth() {
+        return this.health;
     }
 }
