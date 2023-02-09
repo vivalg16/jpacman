@@ -15,6 +15,7 @@ import nl.tudelft.jpacman.sprite.Sprite;
 public class Player extends Unit {
 
     private static final int NO_HEALTH_REMAINING = 0;
+    private int health;
 
     /**
      * The amount of points accumulated by this player.
@@ -41,8 +42,6 @@ public class Player extends Unit {
      */
     private Unit killer;
 
-    private Health health;
-
     /**
      * Creates a new player with a score of 0 points.
      *
@@ -51,7 +50,7 @@ public class Player extends Unit {
      * @param deathAnimation
      *            The sprite to be shown when this player dies.
      */
-    protected Player(Map<Direction, Sprite> spriteMap, AnimatedSprite deathAnimation, Health health) {
+    protected Player(Map<Direction, Sprite> spriteMap, AnimatedSprite deathAnimation, int health) {
         this.health = health;
         this.score = 0;
         this.alive = true;
@@ -72,25 +71,21 @@ public class Player extends Unit {
     /**
      * Sets whether this player is alive or not.
      *
-     * If the player comes back alive, the {@link killer} will be reset.
-     *
      * @param isAlive
      *            <code>true</code> iff this player is alive.
      */
-    public void checkAlive() {
-        if (this.health.getHealthPoints() == NO_HEALTH_REMAINING) {
-            deathSprite.restart();
-            this.alive = false;
-        } else {
-            deathSprite.setAnimating(false);
-            this.killer = null;
-            this.alive = true;
-        }
+    public void setAlive(boolean isAlive) {
+        this.alive = isAlive;
     }
 
-    public void loseHealthPoint() {
-        this.health.decrementHealthPoint();
-        checkAlive();
+    /**
+     * Checks if this player has any health left.
+     */
+    public void checkHealth() {
+        if (this.health == NO_HEALTH_REMAINING) {
+            deathSprite.restart();
+            setAlive(false);
+        }
     }
 
     /**
@@ -139,7 +134,7 @@ public class Player extends Unit {
         score += points;
     }
 
-    public Health getHealth() {
-        return this.health;
+    public void decreaseHealth() {
+        this.health -- ;
     }
 }
