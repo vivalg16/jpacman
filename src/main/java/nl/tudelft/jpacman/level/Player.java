@@ -135,6 +135,6 @@ public class Player extends Unit {
     }
 
     public void decreaseHealth() {
-        this.health -- ;
+        this.health--;
     }
 }

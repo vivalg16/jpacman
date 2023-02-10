@@ -14,6 +14,8 @@ public class PlayerFactory {
      */
     private final PacManSprites sprites;
 
+    private static final int HEALTH_TOTAL = 3;
+
     /**
      * Creates a new player factory.
      *
@@ -30,7 +32,7 @@ public class PlayerFactory {
      * @return A new player.
      */
     public Player createPacMan() {
-        return new Player(getSprites().getPacmanSprites(), getSprites().getPacManDeathAnimation(), 3);
+        return new Player(getSprites().getPacmanSprites(), getSprites().getPacManDeathAnimation(), HEALTH_TOTAL);
     }
 
     /**
